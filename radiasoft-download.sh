@@ -33,9 +33,7 @@ container_perl_main() {
     if (( $EUID != 0 )); then
         install_err 'must be run as root'
     fi
-    if [[ ! -e /etc/fedora-release && ! -e /etc/yum.repos.d/epel.repo ]]; then
-        yum --enablerepo=extras install -y -q epel-release
-    fi
+    install_repo_eval redhat-base
     local x=(
         awstats
         gcc-c++
@@ -55,6 +53,17 @@ container_perl_main() {
         rpm-build
         xapian-core-devel
 
+        # First pass on textlive
+        texlive
+        texlive-collection-latex
+        texlive-collection-latexrecommended
+        texlive-collection-xetex
+        texlive-latex
+        texlive-xetex
+        texlive-xetex-def
+        # texlive-collection-latexextra
+
+        ImageMagick-perl
         perl-Algorithm-Diff
         perl-Archive-Zip
         perl-BSD-Resource
