@@ -1,0 +1,2 @@
+#DEBUG: put #DEBUG in front of the next line
+#yum update

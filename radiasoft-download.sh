@@ -33,6 +33,9 @@ container_perl_main() {
     if (( $EUID != 0 )); then
         install_err 'must be run as root'
     fi
+    if [[ ! -e /etc/fedora-release && ! -e /etc/yum.repos.d/epel.repo ]]; then
+        yum --enablerepo=extras install -y -q epel-release
+    fi
     local x=(
         awstats
         gcc-c++
@@ -181,7 +184,7 @@ container_perl_main() {
         ln -s /usr/share/awstats /usr/local
     fi
     install_tmp_dir
-    mkdir -p /root/.cpan root/.cpan/CPAN
+    mkdir -p /root/.cpan{,/CPAN}
     container_perl_install MyConfig.pm /root/.cpan/CPAN/MyConfig.pm 400
     local f
     mkdir -p /usr/java
@@ -212,7 +215,7 @@ container_perl_main() {
         install_download src/perl2html-0.9.2.tar.bz2 | tar xjf -
         cd perl2html-0.9.2
         # https://lists.gnu.org/archive/html/octave-maintainers/2012-05/msg00208.html
-        perl -pi -e 's{\@LEX\@}{flex --noyywrap}' Makefile.inn
+        perl -pi -e 's{\@LEX\@}{flex --noyywrap}' Makefile.in
         ./configure
         make install
     )
