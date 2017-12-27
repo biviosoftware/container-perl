@@ -50,6 +50,7 @@ container_perl_main() {
         poppler-utils
         postgresql-devel
         procmail
+        spamassassin
         rpm-build
         xapian-core-devel
 
@@ -227,6 +228,36 @@ container_perl_main() {
         perl -pi -e 's{\@LEX\@}{flex --noyywrap}' Makefile.in
         ./configure
         make install
+    )
+    (
+        install_download src/postgrey-1.37.tar.bz2 | tar xjf -
+        cd postgrey-1.37
+        install_download src/postgrey-1.37.patch | patch || exit 1
+        install_download src/postgrey-init.sh > postgrey-init.sh
+        install -d -m 0755 /usr/share/postgrey
+        install -m 0755 postgrey /usr/sbin/postgrey
+        install -m 0755 postgrey-init.sh /usr/sbin/postgrey-init
+        install -m 0444 postgrey_whitelist_clients /usr/share/postgrey
+        ln -s /var/lib/postgrey/etc /etc/postgrey
+    )
+    (
+        # http://forums.sentora.org/showthread.php?tid=1118
+        mkdir /etc/spamassassin/sa-update-keys
+        chmod 700 /etc/spamassassin/sa-update-keys
+        chown vagrant:vagrant /etc/spamassassin/sa-update-keys
+
+SPAMDOPTIONS='--daemonize --username=spamd --max-children=3 --socketpath=$SOCKET'
+
+        RUN sed -i 's/^logfile = .*$/logfile = \/dev\/stderr/g' /etc/razor/razor-agent.conf
+
+        cd postgrey-1.37
+        install_download src/postgrey-1.37.patch | patch || exit 1
+        install_download src/postgrey-init.sh > postgrey-init.sh
+        install -d -m 0755 /usr/share/postgrey
+        install -m 0755 postgrey /usr/sbin/postgrey
+        install -m 0755 postgrey-init.sh /usr/sbin/postgrey-init
+        install -m 0444 postgrey_whitelist_clients /usr/share/postgrey
+        ln -s /var/lib/postgrey/etc /etc/postgrey
     )
 }
 
