@@ -1,0 +1,107 @@
+*** postgrey~	2016-09-22 02:09:38.000000000 -0600
+--- postgrey	2016-12-14 15:11:23.000000000 -0700
+***************
+*** 24,31 ****
+  @ISA = qw(Net::Server::Multiplex);
+
+  my $VERSION = '1.37';
+! my $DEFAULT_DBDIR = '/var/spool/postfix/postgrey';
+! my $CONFIG_DIR = '/etc/postfix';
+
+  sub read_clients_whitelists($)
+  {
+--- 24,31 ----
+  @ISA = qw(Net::Server::Multiplex);
+
+  my $VERSION = '1.37';
+! my $DEFAULT_DBDIR = '/var/lib/postgrey';
+! my $CONFIG_DIR = '/etc/postgrey';
+
+  sub read_clients_whitelists($)
+  {
+***************
+*** 478,484 ****
+      }
+
+      # X-Greylist header:
+!     if(!$last_was_successful and $self->is_new_instance($attr->{instance})) {
+          # add X-Greylist header
+          my $date = strftime("%a, %d %b %Y %T %Z", localtime);
+          my $delay = $now-$first;
+--- 478,485 ----
+      }
+
+      # X-Greylist header:
+!     if(!$last_was_successful and $self->is_new_instance($attr->{instance})
+!         and $self->{postgrey}{x_greylist_header}) {
+          # add X-Greylist header
+          my $date = strftime("%a, %d %b %Y %T %Z", localtime);
+          my $delay = $now-$first;
+***************
+*** 599,605 ****
+              proto            => $opt{inet} ? 'tcp' : 'unix',
+              socketmode       => $opt{socketmode} || '0666',
+              user             => $opt{user} || 'postgrey',
+!             group            => $opt{group} || 'nogroup',
+              dbdir            => $opt{dbdir} || $DEFAULT_DBDIR,
+              setsid           => $opt{daemonize} ? 1 : undef,
+              pid_file         => $opt{daemonize} ? $opt{pidfile} : undef,
+--- 600,606 ----
+              proto            => $opt{inet} ? 'tcp' : 'unix',
+              socketmode       => $opt{socketmode} || '0666',
+              user             => $opt{user} || 'postgrey',
+!             group            => $opt{group} || 'postgrey',
+              dbdir            => $opt{dbdir} || $DEFAULT_DBDIR,
+              setsid           => $opt{daemonize} ? 1 : undef,
+              pid_file         => $opt{daemonize} ? $opt{pidfile} : undef,
+***************
+*** 623,629 ****
+                      $opt{'auto-whitelist-clients'} : 5) : 5,
+              retry_window     => $retry_window,
+              greylist_action  => $opt{'greylist-action'} || 'DEFER_IF_PERMIT',
+!             greylist_text    => $opt{'greylist-text'} || 'Greylisted, see http://postgrey.schweikert.ch/help/%r.html',
+              whitelist_clients_files    => $opt{'whitelist-clients'} ||
+                  [ "$CONFIG_DIR/postgrey_whitelist_clients" ,
+                    "$CONFIG_DIR/postgrey_whitelist_clients.local" ],
+--- 624,630 ----
+                      $opt{'auto-whitelist-clients'} : 5) : 5,
+              retry_window     => $retry_window,
+              greylist_action  => $opt{'greylist-action'} || 'DEFER_IF_PERMIT',
+!             greylist_text    => $opt{'greylist-text'} || 'Greylisted',
+              whitelist_clients_files    => $opt{'whitelist-clients'} ||
+                  [ "$CONFIG_DIR/postgrey_whitelist_clients" ,
+                    "$CONFIG_DIR/postgrey_whitelist_clients.local" ],
+***************
+*** 632,638 ****
+              privacy => defined $opt{'privacy'},
+              hostname => defined $opt{hostname} ? $opt{hostname} : hostname,
+              exim => defined $opt{'exim'},
+!             x_greylist_header  => $opt{'x-greylist-header'} || 'X-Greylist: delayed %t seconds by postgrey-%v at %h; %d',
+          },
+      }, 'postgrey';
+
+--- 633,639 ----
+              privacy => defined $opt{'privacy'},
+              hostname => defined $opt{hostname} ? $opt{hostname} : hostname,
+              exim => defined $opt{'exim'},
+!             x_greylist_header  => $opt{'x-greylist-header'} || '',
+          },
+      }, 'postgrey';
+
+***************
+*** 811,817 ****
+   -d, --daemonize         run in the background
+       --pidfile=PATH      put daemon pid into this file
+       --user=USER         run as USER (default: postgrey)
+!      --group=GROUP       run as group GROUP (default: nogroup)
+       --dbdir=PATH        put db files in PATH (default: /var/spool/postfix/postgrey)
+       --delay=N           greylist for N seconds (default: 300)
+       --max-age=N         delete entries older than N days since the last time
+--- 812,818 ----
+   -d, --daemonize         run in the background
+       --pidfile=PATH      put daemon pid into this file
+       --user=USER         run as USER (default: postgrey)
+!      --group=GROUP       run as group GROUP (default: postgrey)
+       --dbdir=PATH        put db files in PATH (default: /var/spool/postfix/postgrey)
+       --delay=N           greylist for N seconds (default: 300)
+       --max-age=N         delete entries older than N days since the last time
