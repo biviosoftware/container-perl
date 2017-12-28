@@ -244,11 +244,6 @@ container_perl_main() {
         rm -f /etc/mail/spamassassin/sought.conf
         # http://forums.sentora.org/showthread.php?tid=1118
         chown -R vagrant:vagrant /etc/mail/spamassassin /var/lib/spamassassin
-
-SPAMDOPTIONS='--daemonize --username=spamd --max-children=3 --socketpath=$SOCKET'
-
-        RUN sed -i 's/^logfile = .*$/logfile = \/dev\/stderr/g' /etc/razor/razor-agent.conf
-        ln -s /var/lib/postgrey/etc /etc/postgrey
     )
 }
 
