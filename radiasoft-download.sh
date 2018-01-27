@@ -191,7 +191,7 @@ container_perl_main() {
     install_yum_install "${x[@]}"
     umask 022
     if [[ ! -L /usr/local/awstats ]]; then
-        ln -s /usr/share/awstats /usr/local
+        ln --relative -s /usr/share/awstats /usr/local
     fi
     install_tmp_dir
     mkdir -p /root/.cpan{,/CPAN}
@@ -236,7 +236,8 @@ container_perl_main() {
         install -m 0755 postgrey /usr/sbin/postgrey
         install -d -m 0755 /usr/share/postgrey
         install -m 0444 postgrey_whitelist_clients /usr/share/postgrey
-        ln -s /var/lib/postgrey/etc /etc/postgrey
+        # POSIT: rsconf/component/postgrey.py sets etc
+        ln --relative -s /srv/postgrey/etc /etc/postgrey
     )
     (
         # https://wiki.apache.org/spamassassin/SoughtRules
