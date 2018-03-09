@@ -79,6 +79,7 @@ container_perl_main() {
         perl-Convert-ASN1
         perl-Crypt-CBC
         perl-Crypt-DES
+        perl-Crypt-Eksblowfish
         perl-Crypt-IDEA
         perl-Crypt-OpenSSL-RSA
         perl-Crypt-OpenSSL-Random
