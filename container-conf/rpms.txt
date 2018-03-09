@@ -1,2 +1,4 @@
 #DEBUG: put #DEBUG in front of the next line
-#yum update
+#DO NOT INSTALL #yum update
+# httpd gets SEGV with cpp-4.8.5-16.el7_4.2
+cpp-4.8.5-16.el7_4.1
