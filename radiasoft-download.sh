@@ -202,7 +202,7 @@ container_perl_main() {
     done
     perl -pi -e 'm{local\(\$\[} && ($_ = q{})' /usr/share/perl5/*.pl
     cpan install OLLY/Search-Xapian-1.2.22.0.tar.gz
-    cpan install DPARIS/Crypt-Blowfish-2.14.tar.gz
+    #cpan install DPARIS/Crypt-Blowfish-2.14.tar.gz
     (
         install_download src/gmp-6.0.0a.tar.bz2 | tar xjf -
         cd gmp-6.0.0/demos/perl
