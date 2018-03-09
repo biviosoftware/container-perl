@@ -51,6 +51,7 @@ container_perl_main() {
         postgresql-devel
         procmail
         spamassassin
+        strace
         rpm-build
         xapian-core-devel
 
