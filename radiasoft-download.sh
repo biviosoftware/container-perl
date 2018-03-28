@@ -43,8 +43,6 @@ container_perl_main() {
         java-1.7.0-openjdk-devel
         # Needed by perl2html
         flex
-        # Needed to send mail inside containers
-        mailx
         mdbtools
         mod_perl
         mod_ssl
