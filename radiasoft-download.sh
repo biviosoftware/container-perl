@@ -222,6 +222,7 @@ container_perl_main() {
         ./configure --prefix=/usr/local --disable-wordview
         make
         make install
+
     )
     (
         install_download src/perl2html-0.9.2.tar.bz2 | tar xjf -
@@ -241,6 +242,32 @@ container_perl_main() {
         # POSIT: rsconf/component/postgrey.py sets etc
         ln --relative -s /srv/postgrey/etc /etc/postgrey
     )
+install ruby-devel
+umask 022
+gem install fpm
+fpm -t rpm -s dir -n t -v 1 --rpm-auto-add-directories --rpm-use-file-permissions
+/usr/java
+/usr/local/share/catdoc
+/usr/local/lib64/perl5
+/usr/local/bin/catdoc
+/usr/local/bin/catppt
+/usr/local/bin/docx2txt
+/usr/local/bin/html2ps
+/usr/local/bin/ldat
+/usr/local/bin/perl2html
+/usr/local/bin/trgrep
+/usr/local/bin/unixtime
+/usr/local/bin/xls2csv
+/usr/local/awstats
+/etc/postgrey
+/usr/sbin/postgrey
+/usr/share/postgrey
+
+rsc:
+/etc/bivio.bconf
+
+    perl -pi -e 'm{local\(\$\[} && ($_ = q{})' /usr/share/perl5/*.pl
+
     (
         # https://wiki.apache.org/spamassassin/SoughtRules
         # Update: this is no longer active, and should not be used.
