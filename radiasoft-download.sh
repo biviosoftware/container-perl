@@ -236,9 +236,8 @@ container_perl_main() {
         install_err 'must be run as root'
     fi
     local p
-    for p in "$@"; do
-        container_perl_install_$p
-    done
+    container_perl_install_base
+    container_perl_install_rest
 }
 
 container_perl_make() {
