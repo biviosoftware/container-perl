@@ -7,7 +7,7 @@ export BIVIO_WANT_PERL=
 
 build_as_root() {
     echo 'export BIVIO_WANT_PERL=' >> ~/.pre_bivio_bashrc
-    curl radia.run | bash -s perl base rest
+    curl radia.run | bash -s biviosoftware/container-perl base rest
 }
 
 build_as_run_user() {
