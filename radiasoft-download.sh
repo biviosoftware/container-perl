@@ -243,7 +243,7 @@ container_perl_main() {
     fi
     local p
     for p in "$@"; do
-        perl_install_$p
+        container_perl_install_$p
     done
 }
 
