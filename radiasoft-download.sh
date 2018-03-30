@@ -6,62 +6,6 @@ container_perl_download() {
     chmod "$mode" "$dst"
 }
 
-container_perl_install_rest() {
-    umask 022
-    install_tmp_dir
-    if [[ ! -L /usr/local/awstats ]]; then
-        ln --relative -s /usr/share/awstats /usr/local
-    fi
-    mkdir -p /root/.cpan{,/CPAN}
-    container_perl_download MyConfig.pm /root/.cpan/CPAN/MyConfig.pm 400
-    local f
-    mkdir -p /usr/java
-    for f in bcprov-jdk15-145.jar itextpdf-5.5.8.jar yui-compressor.jar; do
-        container_perl_download "$f" /usr/java/"$f" 444
-    done
-    cpan install OLLY/Search-Xapian-1.2.22.0.tar.gz
-    cpan install DPARIS/Crypt-Blowfish-2.14.tar.gz
-    (
-        install_download src/gmp-6.0.0a.tar.bz2 | tar xjf -
-        cd gmp-6.0.0/demos/perl
-        install_download src/gmp-6.0.0.patch | patch -p0
-        container_perl_make
-    )
-    (
-        git clone --recursive --depth 1 https://github.com/biviosoftware/perl-misc
-        cd perl-misc
-        container_perl_make
-    )
-    (
-        git clone --recursive --depth 1 https://github.com/biviosoftware/external-catdoc
-        cd external-catdoc
-        ./configure --prefix=/usr/local --disable-wordview
-        make
-        make install
-
-    )
-    (
-        install_download src/perl2html-0.9.2.tar.bz2 | tar xjf -
-        cd perl2html-0.9.2
-        # https://lists.gnu.org/archive/html/octave-maintainers/2012-05/msg00208.html
-        perl -pi -e 's{\@LEX\@}{flex --noyywrap}' Makefile.in
-        ./configure
-        make install
-    )
-    (
-        install_download src/postgrey-1.37.tar.bz2 | tar xjf -
-        cd postgrey-1.37
-        install_download src/postgrey-1.37.patch | patch || exit 1
-        install -m 0755 postgrey /usr/sbin/postgrey
-        install -d -m 0755 /usr/share/postgrey
-        install -m 0444 postgrey_whitelist_clients /usr/share/postgrey
-        # POSIT: rsconf/component/postgrey.py sets etc
-        ln --relative -s /srv/postgrey/etc /etc/postgrey
-    )
-    install_yum_install ruby-devel
-    gem install fpm
-}
-
 container_perl_install_base() {
     install_repo_eval redhat-base
     local x=(
@@ -229,6 +173,62 @@ container_perl_install_base() {
         # http://forums.sentora.org/showthread.php?tid=1118
         chown -R vagrant:vagrant /etc/mail/spamassassin /var/lib/spamassassin
     )
+}
+
+container_perl_install_rest() {
+    umask 022
+    install_tmp_dir
+    if [[ ! -L /usr/local/awstats ]]; then
+        ln --relative -s /usr/share/awstats /usr/local
+    fi
+    mkdir -p /root/.cpan{,/CPAN}
+    container_perl_download MyConfig.pm /root/.cpan/CPAN/MyConfig.pm 400
+    local f
+    mkdir -p /usr/java
+    for f in bcprov-jdk15-145.jar itextpdf-5.5.8.jar yui-compressor.jar; do
+        container_perl_download "$f" /usr/java/"$f" 444
+    done
+    cpan install OLLY/Search-Xapian-1.2.22.0.tar.gz
+    cpan install DPARIS/Crypt-Blowfish-2.14.tar.gz
+    (
+        install_download src/gmp-6.0.0a.tar.bz2 | tar xjf -
+        cd gmp-6.0.0/demos/perl
+        install_download src/gmp-6.0.0.patch | patch -p0
+        container_perl_make
+    )
+    (
+        git clone --recursive --depth 1 https://github.com/biviosoftware/perl-misc
+        cd perl-misc
+        container_perl_make
+    )
+    (
+        git clone --recursive --depth 1 https://github.com/biviosoftware/external-catdoc
+        cd external-catdoc
+        ./configure --prefix=/usr/local --disable-wordview
+        make
+        make install
+
+    )
+    (
+        install_download src/perl2html-0.9.2.tar.bz2 | tar xjf -
+        cd perl2html-0.9.2
+        # https://lists.gnu.org/archive/html/octave-maintainers/2012-05/msg00208.html
+        perl -pi -e 's{\@LEX\@}{flex --noyywrap}' Makefile.in
+        ./configure
+        make install
+    )
+    (
+        install_download src/postgrey-1.37.tar.bz2 | tar xjf -
+        cd postgrey-1.37
+        install_download src/postgrey-1.37.patch | patch || exit 1
+        install -m 0755 postgrey /usr/sbin/postgrey
+        install -d -m 0755 /usr/share/postgrey
+        install -m 0444 postgrey_whitelist_clients /usr/share/postgrey
+        # POSIT: rsconf/component/postgrey.py sets etc
+        ln --relative -s /srv/postgrey/etc /etc/postgrey
+    )
+    install_yum_install ruby-devel
+    gem install fpm
 }
 
 container_perl_main() {
