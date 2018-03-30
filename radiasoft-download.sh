@@ -231,12 +231,6 @@ container_perl_install_base() {
     )
 }
 
-container_perl_make() {
-    perl Makefile.PL PREFIX=/usr/local < /dev/null
-    make POD2MAN=/bin/true
-    make POD2MAN=/bin/true pure_install
-}
-
 container_perl_main() {
     if (( $EUID != 0 )); then
         install_err 'must be run as root'
@@ -245,6 +239,12 @@ container_perl_main() {
     for p in "$@"; do
         container_perl_install_$p
     done
+}
+
+container_perl_make() {
+    perl Makefile.PL PREFIX=/usr/local < /dev/null
+    make POD2MAN=/bin/true
+    make POD2MAN=/bin/true pure_install
 }
 
 container_perl_main "${install_extra_args[@]}"
