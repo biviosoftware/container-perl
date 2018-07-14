@@ -1,3 +1,1 @@
-### Perl Container
-
-See container-bop
+See https://github.com/radiasoft/rsconf/wiki/Development
