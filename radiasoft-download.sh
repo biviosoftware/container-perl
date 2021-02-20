@@ -47,6 +47,7 @@ container_perl_install_base() {
         perl-BerkeleyDB
         perl-Business-ISBN
         perl-Business-ISBN-Data
+        perl-Canary-Stability
         perl-CPAN
         perl-Class-Load
         perl-Class-Load-XS
@@ -101,6 +102,8 @@ container_perl_install_base() {
         perl-IO-String
         perl-IO-stringy
         perl-Image-Size
+        perl-JSON
+        perl-JSON-XS
         perl-LDAP
         perl-LWP-MediaTypes
         perl-LWP-Protocol-https
