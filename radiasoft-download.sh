@@ -186,6 +186,12 @@ container_perl_install_base() {
         # http://forums.sentora.org/showthread.php?tid=1118
         chown -R vagrant:vagrant /etc/mail/spamassassin /var/lib/spamassassin
     )
+    umask 022
+    cat > /etc/php.d/bivio.ini <<'EOF'
+[Date]
+date.timezone = America/Denver
+EOF
+    chmod 444 /etc/php.d/bivio.ini
 }
 
 container_perl_install_rest() {
