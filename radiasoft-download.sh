@@ -1,9 +1,16 @@
 #!/bin/bash
 
 container_perl_download() {
-    local src=$1 dst=$2 mode=$3
-    install_download src/"$src" > "$dst"
-    chmod "$mode" "$dst"
+    local src=$1 dst=${2:-} mode=${3:-}
+    (
+        install_url=https://github.com/biviosoftware/container-perl/raw/master/src
+        if [[ $dst ]]; then
+            install_download "$src" > "$dst"
+            chmod "$mode" "$dst"
+        else
+            install_download "$src"
+        fi
+    )
 }
 
 container_perl_install_base() {
@@ -195,9 +202,9 @@ container_perl_install_rest() {
     cpan install OLLY/Search-Xapian-1.2.22.0.tar.gz
     cpan install DPARIS/Crypt-Blowfish-2.14.tar.gz
     (
-        install_download src/gmp-6.0.0a.tar.bz2 | tar xjf -
+        container_perl_download gmp-6.0.0a.tar.bz2 | tar xjf -
         cd gmp-6.0.0/demos/perl
-        install_download src/gmp-6.0.0.patch | patch -p0
+        container_perl_download gmp-6.0.0.patch | patch -p0
         container_perl_make
     )
     (
@@ -214,7 +221,7 @@ container_perl_install_rest() {
 
     )
     (
-        install_download src/perl2html-0.9.2.tar.bz2 | tar xjf -
+        container_perl_download perl2html-0.9.2.tar.bz2 | tar xjf -
         cd perl2html-0.9.2
         # https://lists.gnu.org/archive/html/octave-maintainers/2012-05/msg00208.html
         perl -pi -e 's{\@LEX\@}{flex --noyywrap}' Makefile.in
@@ -222,9 +229,9 @@ container_perl_install_rest() {
         make install
     )
     (
-        install_download src/postgrey-1.37.tar.bz2 | tar xjf -
+        container_perl_download postgrey-1.37.tar.bz2 | tar xjf -
         cd postgrey-1.37
-        install_download src/postgrey-1.37.patch | patch || exit 1
+        container_perl_download postgrey-1.37.patch | patch || exit 1
         install -m 0755 postgrey /usr/sbin/postgrey
         install -d -m 0755 /usr/share/postgrey
         install -m 0444 postgrey_whitelist_clients /usr/share/postgrey
@@ -251,5 +258,3 @@ container_perl_make() {
     make POD2MAN=/bin/true
     make POD2MAN=/bin/true pure_install
 }
-
-container_perl_main "${install_extra_args[@]}"
