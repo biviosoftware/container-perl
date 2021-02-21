@@ -258,3 +258,6 @@ container_perl_make() {
     make POD2MAN=/bin/true
     make POD2MAN=/bin/true pure_install
 }
+
+# Must be here, because https://github.com/radiasoft/download/issues/154
+container_perl_main "${install_extra_args[@]}"
