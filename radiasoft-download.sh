@@ -28,6 +28,8 @@ container_perl_install_base() {
         mod_perl
         mod_ssl
         openssl-devel
+        php
+        php-dom
         poppler-utils
         postgresql-devel
         procmail
