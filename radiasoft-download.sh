@@ -246,9 +246,8 @@ container_perl_install_rest() {
         # POSIT: rsconf/component/postgrey.py sets etc
         ln --relative -s /srv/postgrey/etc /etc/postgrey
     )
-    # fpm needs ruby & bind is needed for bivio-named
-    install_yum_install ruby-devel bind
-    gem install fpm
+    # bind is needed for bivio-named
+    install_yum_install bind
 }
 
 container_perl_main() {
