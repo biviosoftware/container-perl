@@ -7,7 +7,7 @@ export BIVIO_WANT_PERL=
 
 build_as_root() {
     echo 'export BIVIO_WANT_PERL=' >> ~/.pre_bivio_bashrc
-    install_repo biviosoftware/container-perl base rest
+    install_repo_eval biviosoftware/container-perl base rest
 }
 
 build_as_run_user() {
