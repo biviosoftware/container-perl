@@ -21,7 +21,6 @@ container_perl_install_base() {
         ghostscript
         gmp-devel
         httpd
-        java-1.7.0-openjdk-devel
         # Needed by perl2html
         flex
         mdbtools
