@@ -109,6 +109,7 @@ container_perl_install_base() {
         perl-IO-Socket-SSL
         perl-IO-String
         perl-IO-stringy
+        perl-IO-Tty
         perl-Image-Size
         perl-JSON
         perl-JSON-XS
@@ -132,8 +133,10 @@ container_perl_install_base() {
         perl-Net-Daemon
         perl-Net-HTTP
         perl-Net-IP
+        perl-Net-OpenSSH
         perl-Net-SSLeay
         perl-Net-Server
+        perl-Net-SFTP-Foreign
         perl-NetAddr-IP
         perl-OLE-Storage_Lite
         perl-Package-DeprecationManager
