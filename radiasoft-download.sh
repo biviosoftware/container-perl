@@ -186,7 +186,9 @@ container_perl_install_base() {
         # Update: this is no longer active, and should not be used.
         rm -f /etc/mail/spamassassin/sought.conf
         # http://forums.sentora.org/showthread.php?tid=1118
-        chown -R vagrant:vagrant /etc/mail/spamassassin /var/lib/spamassassin
+        # sa-update-keys needs to be owned by root
+        find /etc/mail/spamassassin ! -user vagrant ! \( -name sa-update-keys -prune \) \
+            | xargs --no-run-if-empty chown vagrant:
     )
     umask 022
     cat > /etc/php.d/bivio.ini <<'EOF'
