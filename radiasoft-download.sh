@@ -32,6 +32,7 @@ container_perl_install_base() {
         poppler-utils
         postgresql-devel
         procmail
+        qrencode
         spamassassin
         strace
         rpm-build
@@ -117,6 +118,7 @@ container_perl_install_base() {
         perl-LWP-MediaTypes
         perl-LWP-Protocol-https
         perl-List-MoreUtils
+        perl-MIME-Base32
         perl-MIME-Types
         perl-MIME-tools
         perl-MRO-Compat
