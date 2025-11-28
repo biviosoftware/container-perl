@@ -6,6 +6,7 @@ build_maintainer="Bivio Software <$build_type@bivio.biz>"
 export BIVIO_WANT_PERL=
 
 build_as_root() {
+    install_repo_eval redhat-base
     echo 'export BIVIO_WANT_PERL=' >> ~/.pre_bivio_bashrc
     install_repo_eval biviosoftware/container-perl base rest
 }
