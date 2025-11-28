@@ -14,6 +14,12 @@ container_perl_download() {
 }
 
 container_perl_install_base() {
+    if install_os_is_centos_7; then
+        install_sudo sed -i.bak -e 's,^mirrorlist=http://mirrorlist,#mirrorlist=http://vault,' -e 's,^#baseurl=http://mirror.centos.org,baseurl=https://depot.radiasoft.org/yum,' /etc/yum.repos.d/CentOS-Base.repo
+        install_yum clean all
+        install_yum makecache
+    fi
+    install_yum update
     install_repo_eval redhat-base
     local x=(
         awstats
