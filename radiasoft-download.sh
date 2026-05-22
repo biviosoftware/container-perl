@@ -70,6 +70,7 @@ container_perl_install_base() {
         perl-Crypt-OpenSSL-Random
         perl-Crypt-RC4
         perl-Crypt-SSLeay
+        perl-CryptX
         perl-DBD-Pg
         perl-DBI
         perl-Data-OptList
