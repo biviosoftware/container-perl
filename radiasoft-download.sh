@@ -216,6 +216,10 @@ container_perl_install_rest() {
     done
     cpan install OLLY/Search-Xapian-1.2.22.0.tar.gz
     cpan install DPARIS/Crypt-Blowfish-2.14.tar.gz
+    cpan install BINGOS/ExtUtils-MakeMaker-7.78.tar.gz
+    cpan install RJBS/CPAN-Meta-2.150013.tar.gz
+    cpan install LEONT/Dist-Build-0.028.tar.gz
+    cpan install LEONT/Crypt-Argon2-0.031.tar.gz
     (
         container_perl_download gmp-6.0.0a.tar.bz2 | tar xjf -
         cd gmp-6.0.0/demos/perl
