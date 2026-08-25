@@ -16,14 +16,13 @@ container_perl_download() {
 container_perl_install_base() {
     install_repo_eval redhat-base
     local x=(
-        awstats
         gcc-c++
         ghostscript
+        glib2-devel
         gmp-devel
         httpd
         # Needed by perl2html
         flex
-        mdbtools
         mod_perl
         mod_ssl
         openssl-devel
@@ -113,7 +112,6 @@ container_perl_install_base() {
         perl-LWP-MediaTypes
         perl-LWP-Protocol-https
         perl-List-MoreUtils
-        perl-MIME-Base32
         perl-MIME-Types
         perl-MIME-tools
         perl-MRO-Compat
@@ -192,9 +190,13 @@ EOF
 container_perl_install_rest() {
     umask 022
     install_tmp_dir
-    if [[ ! -L /usr/local/awstats ]]; then
-        ln --relative -s /usr/share/awstats /usr/local
-    fi
+    (
+        # No awstats rpm on el10
+        container_perl_download awstats-8.0.tar.bz2 | tar xjf -
+        rm -rf /usr/local/awstats
+        mv awstats-8.0 /usr/local/awstats
+        chmod -R a+rX /usr/local/awstats
+    )
     mkdir -p /root/.cpan{,/CPAN}
     container_perl_download MyConfig.pm /root/.cpan/CPAN/MyConfig.pm 400
     local f
@@ -208,6 +210,7 @@ container_perl_install_rest() {
     cpan install RJBS/CPAN-Meta-2.150013.tar.gz
     cpan install LEONT/Dist-Build-0.028.tar.gz
     cpan install LEONT/Crypt-Argon2-0.031.tar.gz
+    cpan install REHSACK/MIME-Base32-1.303.tar.gz
     (
         container_perl_download gmp-6.0.0a.tar.bz2 | tar xjf -
         cd gmp-6.0.0/demos/perl
@@ -218,6 +221,19 @@ container_perl_install_rest() {
         git clone --recursive --depth 1 https://github.com/biviosoftware/perl-misc
         cd perl-misc
         container_perl_make
+    )
+    (
+        # No mdbtools rpm on el10
+        container_perl_download mdbtools-1.0.1.tar.bz2 | tar xjf -
+        cd mdbtools-1.0.1
+        # --disable-man avoids the txt2man dependency
+        ./configure --prefix=/usr/local --disable-man --disable-static
+        # configure falls back to the bundled glib replacements without
+        # failing, so check that glib2-devel was actually found
+        grep -q -- '-DHAVE_GLIB=1' Makefile \
+            || install_err 'mdbtools: configure did not find glib2-devel'
+        make
+        make install
     )
     (
         git clone --recursive --depth 1 https://github.com/biviosoftware/external-catdoc
