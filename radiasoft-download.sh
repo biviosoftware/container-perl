@@ -54,8 +54,6 @@ container_perl_install_base() {
         perl-Archive-Zip
         perl-BSD-Resource
         perl-BerkeleyDB
-        perl-Business-ISBN
-        perl-Business-ISBN-Data
         perl-Canary-Stability
         perl-CPAN
         perl-Class-Load
@@ -69,7 +67,6 @@ container_perl_install_base() {
         perl-Crypt-OpenSSL-RSA
         perl-Crypt-OpenSSL-Random
         perl-Crypt-RC4
-        perl-Crypt-SSLeay
         perl-CryptX
         perl-DBD-Pg
         perl-DBI
@@ -92,13 +89,10 @@ container_perl_install_base() {
         perl-Email-MIME-ContentType
         perl-Email-MIME-Encodings
         perl-Email-MessageID
-        perl-Email-Reply
-        perl-Email-Send
         perl-Email-Simple
         perl-Encode-Detect
         perl-Encode-Locale
         perl-Error
-        perl-File-MMagic
         perl-HTML-Form
         perl-HTML-Parser
         perl-HTML-Tagset
@@ -126,14 +120,12 @@ container_perl_install_base() {
         perl-Mail-DKIM
         perl-Mail-SPF
         perl-MailTools
-        perl-Math-Random-ISAAC
         perl-Module-Implementation
         perl-Module-Runtime
         perl-Mozilla-CA
         perl-Net-CIDR-Lite
         perl-Net-DNS
         perl-Net-DNS-Resolver-Programmable
-        perl-Net-Daemon
         perl-Net-HTTP
         perl-Net-IP
         perl-Net-OpenSSH
@@ -151,13 +143,10 @@ container_perl_install_base() {
         perl-Parse-RecDescent
         perl-PathTools
         perl-Perl4-CoreLibs
-        perl-PlRPC
-        perl-Return-Value
         perl-Socket6
         perl-Sub-Exporter
         perl-Sub-Install
         perl-Sub-Uplevel
-        perl-Sys-Hostname-Long
         perl-Template-Toolkit
         perl-TermReadKey
         perl-Test-Exception
@@ -165,7 +154,6 @@ container_perl_install_base() {
         perl-Test-MockObject
         perl-Test-Requires
         perl-Test-Simple
-        perl-Test-WWW-Selenium
         perl-Text-CSV
         perl-TimeDate
         perl-Try-Tiny
