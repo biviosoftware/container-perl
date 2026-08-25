@@ -18,7 +18,6 @@ container_perl_install_base() {
     local x=(
         gcc-c++
         ghostscript
-        glib2-devel
         gmp-devel
         httpd
         # Needed by perl2html
@@ -167,6 +166,17 @@ container_perl_install_base() {
         perl-YAML-Syck
         perl-libwww-perl
     )
+    if install_os_is_centos_7; then
+        x+=(
+            awstats
+            mdbtools
+            perl-MIME-Base32
+        )
+    else
+        # No el10 rpms; installed by container_perl_install_rest.
+        # glib2-devel builds mdbtools.
+        x+=( glib2-devel )
+    fi
     install_yum_install "${x[@]}"
     umask 022
     perl -pi -e 'm{local\(\$\[} && ($_ = q{})' /usr/share/perl5/*.pl
@@ -190,13 +200,19 @@ EOF
 container_perl_install_rest() {
     umask 022
     install_tmp_dir
-    (
-        # No awstats rpm on el10
-        container_perl_download awstats-8.0.tar.bz2 | tar xjf -
-        rm -rf /usr/local/awstats
-        mv awstats-8.0 /usr/local/awstats
-        chmod -R a+rX /usr/local/awstats
-    )
+    if install_os_is_centos_7; then
+        if [[ ! -L /usr/local/awstats ]]; then
+            ln --relative -s /usr/share/awstats /usr/local
+        fi
+    else
+        (
+            # No awstats rpm on el10
+            container_perl_download awstats-8.0.tar.bz2 | tar xjf -
+            rm -rf /usr/local/awstats
+            mv awstats-8.0 /usr/local/awstats
+            chmod -R a+rX /usr/local/awstats
+        )
+    fi
     mkdir -p /root/.cpan{,/CPAN}
     container_perl_download MyConfig.pm /root/.cpan/CPAN/MyConfig.pm 400
     local f
@@ -210,7 +226,10 @@ container_perl_install_rest() {
     cpan install RJBS/CPAN-Meta-2.150013.tar.gz
     cpan install LEONT/Dist-Build-0.028.tar.gz
     cpan install LEONT/Crypt-Argon2-0.031.tar.gz
-    cpan install REHSACK/MIME-Base32-1.303.tar.gz
+    if ! install_os_is_centos_7; then
+        # No perl-MIME-Base32 rpm on el10
+        cpan install REHSACK/MIME-Base32-1.303.tar.gz
+    fi
     (
         container_perl_download gmp-6.0.0a.tar.bz2 | tar xjf -
         cd gmp-6.0.0/demos/perl
@@ -222,19 +241,21 @@ container_perl_install_rest() {
         cd perl-misc
         container_perl_make
     )
-    (
-        # No mdbtools rpm on el10
-        container_perl_download mdbtools-1.0.1.tar.bz2 | tar xjf -
-        cd mdbtools-1.0.1
-        # --disable-man avoids the txt2man dependency
-        ./configure --prefix=/usr/local --disable-man --disable-static
-        # configure falls back to the bundled glib replacements without
-        # failing, so check that glib2-devel was actually found
-        grep -q -- '-DHAVE_GLIB=1' Makefile \
-            || install_err 'mdbtools: configure did not find glib2-devel'
-        make
-        make install
-    )
+    if ! install_os_is_centos_7; then
+        (
+            # No mdbtools rpm on el10
+            container_perl_download mdbtools-1.0.1.tar.bz2 | tar xjf -
+            cd mdbtools-1.0.1
+            # --disable-man avoids the txt2man dependency
+            ./configure --prefix=/usr/local --disable-man --disable-static
+            # configure falls back to the bundled glib replacements
+            # without failing, so check that glib2-devel was found
+            grep -q -- '-DHAVE_GLIB=1' Makefile \
+                || install_err 'mdbtools: configure did not find glib2-devel'
+            make
+            make install
+        )
+    fi
     (
         git clone --recursive --depth 1 https://github.com/biviosoftware/external-catdoc
         cd external-catdoc
