@@ -1,5 +1,5 @@
 #!/bin/bash
-build_image_base=centos:7
+build_image_base=${perl_base:-centos:7}
 build_maintainer="Bivio Software <$build_type@bivio.biz>"
 # Perl and apps are installed globally so don't want a local
 # library conflicting.
