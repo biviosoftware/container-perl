@@ -297,7 +297,7 @@ container_perl_main() {
 }
 
 container_perl_make() {
-    perl Makefile.PL PREFIX=/usr/local < /dev/null
+    perl Makefile.PL < /dev/null
     make POD2MAN=/bin/true
     make POD2MAN=/bin/true pure_install
 }
