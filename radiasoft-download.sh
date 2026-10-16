@@ -220,7 +220,7 @@ container_perl_install_rest() {
     for f in bcprov-jdk15-145.jar itextpdf-5.5.8.jar yui-compressor.jar; do
         container_perl_download "$f" /usr/java/"$f" 444
     done
-    cpan install OLLY/Search-Xapian-1.2.22.0.tar.gz
+    cpan install OLLY/Search-Xapian-1.2.25.7.tar.gz
     cpan install DPARIS/Crypt-Blowfish-2.14.tar.gz
     cpan install BINGOS/ExtUtils-MakeMaker-7.78.tar.gz
     cpan install RJBS/CPAN-Meta-2.150013.tar.gz
