@@ -261,6 +261,13 @@ container_perl_install_rest() {
     (
         git clone --recursive --depth 1 https://github.com/biviosoftware/external-catdoc
         cd external-catdoc
+        if ! install_os_is_centos_7; then
+            # gcc 14 (el10): autoconf 2.13 configure uses implicit int,
+            # an error in newer C standards. find_file does arithmetic on
+            # a NULL pointer, which -O2 optimizes into a segfault.
+            # configure ignores CFLAGS for the build so pass via CC.
+            export CC='gcc -std=gnu89 -fwrapv-pointer'
+        fi
         ./configure --prefix=/usr/local --disable-wordview
         make
         make install
