@@ -278,6 +278,11 @@ container_perl_install_rest() {
         cd perl2html-0.9.2
         # https://lists.gnu.org/archive/html/octave-maintainers/2012-05/msg00208.html
         perl -pi -e 's{\@LEX\@}{flex --noyywrap}' Makefile.in
+        if ! install_os_is_centos_7; then
+            # gcc 14 (el10): autoconf 2.13 configure uses implicit int
+            # an error in newer C standards.
+            export CC='gcc -std=gnu89'
+        fi
         ./configure
         make install
     )
