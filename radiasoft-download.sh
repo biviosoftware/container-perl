@@ -47,6 +47,8 @@ container_perl_install_base() {
         texlive-xetex-def
         # texlive-collection-latexextra
 
+        # el10 ImageMagick-perl only requires ImageMagick-libs; need convert from ImageMagick
+        ImageMagick
         ImageMagick-perl
         perl-Algorithm-Diff
         perl-Archive-Zip
