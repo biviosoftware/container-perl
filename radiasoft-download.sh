@@ -177,7 +177,8 @@ container_perl_install_base() {
     else
         # No el10 rpms; installed by container_perl_install_rest.
         # glib2-devel builds mdbtools.
-        x+=( glib2-devel )
+        # glibc-langpack-en: en_US.UTF-8 is used with java
+        x+=( glib2-devel glibc-langpack-en )
     fi
     install_yum_install "${x[@]}"
     umask 022
