@@ -229,6 +229,8 @@ container_perl_install_rest() {
     if ! install_os_is_centos_7; then
         # No perl-MIME-Base32 rpm on el10
         cpan install REHSACK/MIME-Base32-1.303.tar.gz
+        # No perl-Regexp-IPv6 rpm on el10; URI needs it
+        cpan install SALVA/Regexp-IPv6-0.03.tar.gz
     fi
     (
         container_perl_download gmp-6.0.0a.tar.bz2 | tar xjf -
