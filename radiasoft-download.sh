@@ -43,6 +43,7 @@ container_perl_install_base() {
         texlive-collection-xetex
         texlive-latex
         texlive-multirow
+        texlive-preprint
         texlive-xetex
         texlive-xetex-def
         # texlive-collection-latexextra
